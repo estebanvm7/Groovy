@@ -47,20 +47,23 @@ class Caster {
                     'and' : 'and',
                     'or' : 'or',
                     'not' : 'not',
-                    'if' : 'fIf' ]
+                    'if' : 'fIf' ,
+                    '#t' : 'true',
+                    '#f' : 'false']
     }
 
     def getMap() { this.map }
     def setMap (String key, String value) { map.put(key, value) }
     def findByKey(String key) { this.map.get(key) }
-
+    def strToInt(String a){ a as Integer }    
+    def strToBool(String a) { this.findByKey(a).toBoolean() }
 
 }
 
 
 class Function {
 
-    //def fIf(Object a, Object b,Object condition) {}
+    def fIf(Boolean condition, Object a, Object b) { condition? a : b}
     def add(Integer a, Integer b) { a + b }
     def mult(Integer a, Integer b) { a * b }
     def sub(Integer a, Integer b) { a - b }
@@ -84,29 +87,45 @@ class Dispacher {
     
     def dispach (List list) {
         def condition = this.cast.findByKey(list[0])
-        println condition
-        def param1 = list[1] as Integer
-        def param2 =  list[2] as Integer
         switch(condition) {
+            case 'true':
+                true
+                break
+            case 'false':
+                false
+                break
+            case 'fIf':
+                this.foo?.fIf( this.cast.strToBool(list[1]), this.dispach([list[2]]), this.dispach([list[3]]) )
+                break
             case 'addition':
-                this.foo?.add(param1, param2)
+                this.foo?.add(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
                 break
             case 'multiplication':
-                this.foo?.mult(param1, param2)
+                this.foo?.mult(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
                 break
             case 'substraction':
-                this.foo?.sub(param1, param2)
+                this.foo?.sub(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
                 break
             case 'division':
-                this.foo?.div(param1, param2)
+                this.foo?.div(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
                 break
             case 'module':
-                this.foo?.mod(param1, param2)
+                this.foo?.mod(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
                 break
             case 'equals':
-                this.foo?.equ(param1, param2)
-                break                
+                this.foo?.equ(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
+                break 
+            case 'and':
+                this.foo?.and( this.cast.strToBool(list[1]), this.cast.strToBool(list[2]) )  
+                break
+            case 'or':
+                this.foo?.or( this.cast.strToBool(list[1]), this.cast.strToBool(list[2]) )  
+                break
+            case 'not':
+                this.foo?.not( this.cast.strToBool(list[1]) )  
+                break               
             default:
+                this.cast.strToInt(list[0])
                 break
         }
 
@@ -115,4 +134,4 @@ class Dispacher {
 
 Dispacher dis = new Dispacher()
 Parser p = new Parser()
-dis.dispach(p.parse('(= 3 3)'))
+dis.dispach(p.parse('(if #f 2 3)'))
