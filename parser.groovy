@@ -63,7 +63,7 @@ class Caster {
 
 class Function {
 
-    def fIf(Boolean condition, Object a, Object b) { condition? a : b}
+    def fIf(Object condition, Object a, Object b) { condition? a : b}
     def add(Integer a, Integer b) { a + b }
     def mult(Integer a, Integer b) { a * b }
     def sub(Integer a, Integer b) { a - b }
@@ -78,7 +78,6 @@ class Function {
     def or(Boolean a, Boolean b) { a || b}
     def not(Boolean a) { a ? false : true }  
 } 
-
 
 class Dispacher {
 
@@ -96,6 +95,18 @@ class Dispacher {
                 break
             case 'fIf':
                 this.foo?.fIf( this.cast.strToBool(list[1]), this.dispach([list[2]]), this.dispach([list[3]]) )
+                break
+            case 'greater':
+                this.foo?.greater(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
+                break
+            case 'greaterThan':
+                this.foo?.greaterThan(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
+                break
+            case 'less':
+                this.foo?.less(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
+                break
+            case 'lessThan':
+                this.foo?.lessThan(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
                 break
             case 'addition':
                 this.foo?.add(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
@@ -128,10 +139,17 @@ class Dispacher {
                 this.cast.strToInt(list[0])
                 break
         }
-
     }
 }
 
 Dispacher dis = new Dispacher()
 Parser p = new Parser()
-dis.dispach(p.parse('(if #f 2 3)'))
+def bucle = true
+while(bucle) {
+    def scheme = System.console().readLine 'scheme> '
+    if (scheme == 'exit') { bucle = false }
+    else{ System.console().println( dis.dispach(p.parse(scheme))) }    
+}
+
+
+
