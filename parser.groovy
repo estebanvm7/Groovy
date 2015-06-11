@@ -1,3 +1,19 @@
+map = [:] 
+map = [ '+' : FunctionAdd(a,b), 
+        '*' : FunctionMult(a,b), 
+        '-' : FunctionSub(a,b),
+        'quotient' : FunctionDiv(a,b),
+        'modulo' : FunctionMod(a,b),
+        '=' : FunctionEqu(a,b),
+        '<' : FunctionLess(a,b),
+        '<=' : FunctionLessThan(a,b),
+        '>' : FunctionGreater(a,b),
+        '>=' : FunctionGreaterThan(a,b),
+        'and' : FunctionAnd(a,b),
+        'or' : FunctionOr(a,b),
+        'not' : FunctionNot(a),
+        'if' : FunctionIf(a,b,c) ]
+
 /**
 * El código Scheme corresponde a listas de símbolos demarcadas por
 * paréntesis ( ).
@@ -28,128 +44,217 @@ class Parser {
     }
 }
 
-
-class Caster {
-    def map
-
-    def Caster(){ 
-        this.map = [:] 
-        this.map = [ '+' : 'addition', 
-                    '*' : 'multiplication', 
-                    '-' : 'substraction',
-                    'quotient' : 'division',
-                    'modulo' : 'module',
-                    '=' : 'equals',
-                    '<' : 'less',
-                    '<=' : 'lessThan',
-                    '>' : 'greater',
-                    '>=' : 'greaterThan',
-                    'and' : 'and',
-                    'or' : 'or',
-                    'not' : 'not',
-                    'if' : 'fIf' ,
-                    '#t' : 'true',
-                    '#f' : 'false']
-    }
-
-    def getMap() { this.map }
-    def setMap (String key, String value) { map.put(key, value) }
-    def findByKey(String key) { this.map.get(key) }
-    def strToInt(String a){ a as Integer }    
-    def strToBool(String a) { this.findByKey(a).toBoolean() }
-
+interface FunctionDefinition {
+    def execute ()
 }
 
+class FunctionAdd implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionAdd(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a + this.b
+    }
+}
 
-class Function {
+class FunctionMult implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionMult(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a * this.b
+    }
+}
 
-    def fIf(Object condition, Object a, Object b) { condition? a : b}
-    def add(Integer a, Integer b) { a + b }
-    def mult(Integer a, Integer b) { a * b }
-    def sub(Integer a, Integer b) { a - b }
-    def div(Integer a, Integer b) { a / b }
-    def mod(Integer a, Integer b) { a % b }
-    def equ(Integer a, Integer b) { a == b }
-    def less(Integer a, Integer b) { a < b }
-    def lessThan(Integer a, Integer b) { a <= b }
-    def greater(Integer a, Integer b) { a > b }
-    def greaterThan(Integer a, Integer b) { a >= b }
-    def and(Boolean a, Boolean b) { a && b }
-    def or(Boolean a, Boolean b) { a || b}
-    def not(Boolean a) { a ? false : true }  
-} 
+class FunctionDiv implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionDiv(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a / this.b
+    }
+}
 
-class Dispacher {
+class FunctionSub implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionSub(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a - this.b
+    }
+}
 
-    Function foo = new Function()
-    Caster cast = new Caster()
-    
-    def dispach (List list) {
-        def condition = this.cast.findByKey(list[0])
-        switch(condition) {
-            case 'true':
-                true
-                break
-            case 'false':
-                false
-                break
-            case 'fIf':
-                this.foo?.fIf( this.cast.strToBool(list[1]), this.dispach([list[2]]), this.dispach([list[3]]) )
-                break
-            case 'greater':
-                this.foo?.greater(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
-                break
-            case 'greaterThan':
-                this.foo?.greaterThan(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
-                break
-            case 'less':
-                this.foo?.less(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
-                break
-            case 'lessThan':
-                this.foo?.lessThan(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
-                break
-            case 'addition':
-                this.foo?.add(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
-                break
-            case 'multiplication':
-                this.foo?.mult(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
-                break
-            case 'substraction':
-                this.foo?.sub(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
-                break
-            case 'division':
-                this.foo?.div(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
-                break
-            case 'module':
-                this.foo?.mod(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
-                break
-            case 'equals':
-                this.foo?.equ(this.cast.strToInt(list[1]), this.cast.strToInt(list[2]) )
-                break 
-            case 'and':
-                this.foo?.and( this.cast.strToBool(list[1]), this.cast.strToBool(list[2]) )  
-                break
-            case 'or':
-                this.foo?.or( this.cast.strToBool(list[1]), this.cast.strToBool(list[2]) )  
-                break
-            case 'not':
-                this.foo?.not( this.cast.strToBool(list[1]) )  
-                break               
-            default:
-                this.cast.strToInt(list[0])
-                break
+class FunctionMod implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionMod(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a % this.b
+    }
+}
+
+class FunctionEqu implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionEqu(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a == this.b
+    }
+}
+
+class FunctionLess implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionLess(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a < this.b
+    }
+}
+
+class FunctionLessThan implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionLessThan(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a <= this.b
+    }
+}
+
+class FunctionGreater implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionGreater(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a > this.b
+    }
+}
+
+class FunctionGreaterThan implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionGreaterThan(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a >= this.b
+    }
+}
+
+class FunctionAnd implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionAnd(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a && this.b
+    }
+}
+
+class FunctionOr implements FunctionDefinition{
+    Object a
+    Object b
+    def FunctionOr(Object a,Object b) {
+        this.a = a
+        this.b = b
+    }
+    @Override
+    def execute () {
+        this.a || this.b
+    }
+}
+
+class FunctionNot implements FunctionDefinition{
+    Object a
+    def FunctionNot(Object a) {
+        this.a = a
+    }
+    @Override
+    def execute () {
+        !this.a
+    }
+}
+
+class FunctionIf implements FunctionDefinition{
+    Object a
+    Object b
+    Object c
+    def FunctionIf(Object a,Object b, Object c) {
+        this.a = a
+        this.b = b
+        this.c = c
+    }
+    @Override
+    def execute () {
+        a? b:c
+    }
+}
+class LiteralInteger {
+    def Integer a
+    def LiteralInteger(String b){ this.a = b as Integer }
+    def getA(){ this.a }
+}
+
+class LiteralBool {
+    def Boolean a
+    def LiteralBool(String b){ 
+        if(b == "#t"){
+            this.a = true 
+        }
+
+        else if (b == "#f"){
+            this.a = false
         }
     }
+    def getA(){ this.a }
 }
 
-Dispacher dis = new Dispacher()
-Parser p = new Parser()
-def bucle = true
+/**def bucle = true
 while(bucle) {
     def scheme = System.console().readLine 'scheme> '
     if (scheme == 'exit') { bucle = false }
-    else{ System.console().println( dis.dispach(p.parse(scheme))) }    
-}
+    else{ System.console().println()) }    
+}**/
 
-
-
+FunctionDefinition suma = new FunctionIf(new LiteralBool("#f").getA(),new LiteralInteger("-3").getA(),4)
+println(suma.execute())
