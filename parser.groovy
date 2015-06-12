@@ -1,19 +1,27 @@
-map = [:] 
-map = [ '+' : FunctionAdd(a,b), 
-        '*' : FunctionMult(a,b), 
-        '-' : FunctionSub(a,b),
-        'quotient' : FunctionDiv(a,b),
-        'modulo' : FunctionMod(a,b),
-        '=' : FunctionEqu(a,b),
-        '<' : FunctionLess(a,b),
-        '<=' : FunctionLessThan(a,b),
-        '>' : FunctionGreater(a,b),
-        '>=' : FunctionGreaterThan(a,b),
-        'and' : FunctionAnd(a,b),
-        'or' : FunctionOr(a,b),
-        'not' : FunctionNot(a),
-        'if' : FunctionIf(a,b,c) ]
+class Global {
 
+    def Object a
+    def Object b
+    def Object c
+    def map = [:] 
+    
+    def Global (){
+        this.map = [ '+'         : new FunctionAdd(a,b), 
+            '*'         : new FunctionMult(a,b), 
+            '-'         : new FunctionSub(a,b),
+            '='         : new FunctionEqu(a,b),
+            '<'         : new FunctionLess(a,b),
+            '>'         : new FunctionGreater(a,b),
+            '<='        : new FunctionLessThan(a,b),
+            '>='        : new FunctionGreaterThan(a,b),
+            'if'        : new FunctionIf(a,b,c), 
+            'or'        : new FunctionOr(a,b),
+            'and'       : new FunctionAnd(a,b),
+            'not'       : new FunctionNot(a),
+            'modulo'    : new FunctionMod(a,b),
+            'quotient'  : new FunctionDiv(a,b) ]
+    }
+}
 /**
 * El código Scheme corresponde a listas de símbolos demarcadas por
 * paréntesis ( ).
@@ -59,6 +67,9 @@ class FunctionAdd implements FunctionDefinition{
     def execute () {
         this.a + this.b
     }
+    
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionMult implements FunctionDefinition{
@@ -72,6 +83,9 @@ class FunctionMult implements FunctionDefinition{
     def execute () {
         this.a * this.b
     }
+
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionDiv implements FunctionDefinition{
@@ -83,8 +97,11 @@ class FunctionDiv implements FunctionDefinition{
     }
     @Override
     def execute () {
-        this.a / this.b
+        (this.a).intdiv(this.b)
     }
+
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionSub implements FunctionDefinition{
@@ -98,6 +115,9 @@ class FunctionSub implements FunctionDefinition{
     def execute () {
         this.a - this.b
     }
+
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionMod implements FunctionDefinition{
@@ -111,6 +131,9 @@ class FunctionMod implements FunctionDefinition{
     def execute () {
         this.a % this.b
     }
+
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionEqu implements FunctionDefinition{
@@ -124,6 +147,9 @@ class FunctionEqu implements FunctionDefinition{
     def execute () {
         this.a == this.b
     }
+
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionLess implements FunctionDefinition{
@@ -137,6 +163,9 @@ class FunctionLess implements FunctionDefinition{
     def execute () {
         this.a < this.b
     }
+
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionLessThan implements FunctionDefinition{
@@ -150,6 +179,9 @@ class FunctionLessThan implements FunctionDefinition{
     def execute () {
         this.a <= this.b
     }
+
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionGreater implements FunctionDefinition{
@@ -163,6 +195,9 @@ class FunctionGreater implements FunctionDefinition{
     def execute () {
         this.a > this.b
     }
+
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionGreaterThan implements FunctionDefinition{
@@ -176,6 +211,9 @@ class FunctionGreaterThan implements FunctionDefinition{
     def execute () {
         this.a >= this.b
     }
+
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionAnd implements FunctionDefinition{
@@ -189,6 +227,9 @@ class FunctionAnd implements FunctionDefinition{
     def execute () {
         this.a && this.b
     }
+
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionOr implements FunctionDefinition{
@@ -202,6 +243,8 @@ class FunctionOr implements FunctionDefinition{
     def execute () {
         this.a || this.b
     }
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
 }
 
 class FunctionNot implements FunctionDefinition{
@@ -213,6 +256,8 @@ class FunctionNot implements FunctionDefinition{
     def execute () {
         !this.a
     }
+
+    def setA(Object a) { this.a = a }
 }
 
 class FunctionIf implements FunctionDefinition{
@@ -228,26 +273,30 @@ class FunctionIf implements FunctionDefinition{
     def execute () {
         a? b:c
     }
+
+    def setA(Object a) { this.a = a } 
+    def setB(Object b) { this.b = b }
+    def setC(Object c) { this.c = c }
 }
 class LiteralInteger {
-    def Integer a
-    def LiteralInteger(String b){ this.a = b as Integer }
-    def getA(){ this.a }
+    def Integer num
+    def LiteralInteger(String a){ this.num = a as Integer }
+    def getNumber(){ this.num }
 }
 
 class LiteralBool {
-    def Boolean a
-    def LiteralBool(String b){ 
-        if(b == "#t"){
-            this.a = true 
+    def Boolean bool
+    def LiteralBool(String var){ 
+        if(var == "#t"){
+            this.bool = true 
         }
-
-        else if (b == "#f"){
-            this.a = false
+        else if (var == "#f"){
+            this.bool = false
         }
     }
-    def getA(){ this.a }
+    def getBool(){ this.bool }
 }
+
 
 /**def bucle = true
 while(bucle) {
@@ -255,6 +304,51 @@ while(bucle) {
     if (scheme == 'exit') { bucle = false }
     else{ System.console().println()) }    
 }**/
+//def lista = ['+','2','3']
+//          ['not' , '#t']
 
-FunctionDefinition suma = new FunctionIf(new LiteralBool("#f").getA(),new LiteralInteger("-3").getA(),4)
-println(suma.execute())
+// map.get(list[0])
+
+
+
+class FunctionStack {
+    Global global = new Global()
+    /*def parseList = []
+    
+    def setParseList (String input) { this.parseList = new Parser().parse(input) }
+    def getParseList () { this.parseList }*/
+
+    def analize(Object parseList){
+        println(parseList)
+        if ( !map.containsKey(parseList.head()) ){
+        println("no mapa")
+            if (parseList.head().contains('#')){ new LiteralBool(parseList.head()).getBool() }
+            else{ new LiteralInteger(parseList.head()).getNumber() }
+        }
+        else if (parseList.size() == 2){
+            def variable = global.map.get(parseList[0])
+            def newList = parseList[1]
+            variable.setA(analize(newList))
+            variable.execute()
+        }
+    }
+}
+
+
+// 1
+    // ['12'],['#t']
+// 2
+    // ['+', '1','2']   -   ['if', '#t', '2', '3']    - ['not','#t']
+// 3
+    // ['+',['module', '10', '2'] , ['1']]
+
+/*def variable = map.get('if')
+variable.setA(new LiteralBool('#t').getBool())
+variable.setB(new LiteralInteger('7').getNumber())
+variable.setC(new LiteralInteger('2').getNumber())
+println (variable.execute())*/
+
+FunctionStack f = new FunctionStack()
+Parser par = new Parser()
+def list = par.parse('(#t)')
+println (f.analize(list))
