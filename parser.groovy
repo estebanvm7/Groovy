@@ -320,16 +320,33 @@ class FunctionStack {
 
     def analize(Object parseList){
         println(parseList)
-        if ( !map.containsKey(parseList.head()) ){
-        println("no mapa")
-            if (parseList.head().contains('#')){ new LiteralBool(parseList.head()).getBool() }
-            else{ new LiteralInteger(parseList.head()).getNumber() }
+        def first = global.map.containsKey(parseList[0])
+        if ( !first ){
+            if (parseList.contains('#')) { return new LiteralBool(parseList).getBool() } 
+            else if (parseList[0].contains('#')){ return new LiteralBool(parseList[0]).getBool() }
+            else{ 
+            
+            return new LiteralInteger(parseList).getNumber() }
         }
-        else if (parseList.size() == 2){
+        else {
             def variable = global.map.get(parseList[0])
-            def newList = parseList[1]
-            variable.setA(analize(newList))
-            variable.execute()
+            try{
+                if ( variable.setA(analize(parseList[1]))) { variable.setB(analize(parseList[2])) }
+                else { variable.setC(analize(parseList[3])) } 
+                variable.execute()
+            }catch (Exception e){
+                try{
+                    variable.setA(analize(parseList[1]))
+                    variable.setB(analize(parseList[2]))
+                    variable.execute()
+                }catch (Exception e1){
+                    try {
+                        variable.setA(analize(parseList[1]))
+                        variable.execute()
+                    }catch(Exception e2) {println ("error")}
+                    
+                }
+            }
         }
     }
 }
@@ -350,5 +367,5 @@ println (variable.execute())*/
 
 FunctionStack f = new FunctionStack()
 Parser par = new Parser()
-def list = par.parse('(#t)')
-println (f.analize(list))
+def list = par.parse('(if (not (>= 5 3)) (+ (- 3 1) (modulo 9 6)) (- (* 10 6) (quotient 10 3)))')
+f.analize(list)
