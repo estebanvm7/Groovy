@@ -1,12 +1,13 @@
 class Global {
 
-    def Object a
-    def Object b
-    def Object c
-    def map = [:] 
+    static def Object a
+    static def Object b
+    static def Object c
+    static def map = [:] 
     
-    def Global (){
-        this.map = [ '+'         : new FunctionAdd(a,b), 
+    def static setMap (){
+        this.map = [ 
+            '+'         : new FunctionAdd(a,b), 
             '*'         : new FunctionMult(a,b), 
             '-'         : new FunctionSub(a,b),
             '='         : new FunctionEqu(a,b),
@@ -19,7 +20,7 @@ class Global {
             'and'       : new FunctionAnd(a,b),
             'not'       : new FunctionNot(a),
             'modulo'    : new FunctionMod(a,b),
-            'quotient'  : new FunctionDiv(a,b) ]
+            'quotient'  : new FunctionDiv(a,b)]
     }
 }
 /**
@@ -56,9 +57,30 @@ interface FunctionDefinition {
     def execute ()
 }
 
+class FunctionDefine implements FunctionDefinition{
+    List<Object> parameter
+    List<Object> invoke
+    List<Object> definitions = []
+    Integer param = 0
+
+    def FunctionDefine(List list, List list2){
+        this.parameter = []
+        this.parameter = list
+        this.invoke = []
+        this.invoke = list2
+    }
+    @Override
+    execute(){ this.definitions.each{ it.execute() } }
+    
+     def setDefinitions(FunctionDefinition a) { this.a = definitions.add(a) } 
+
+
+}
+
 class FunctionAdd implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionAdd(Object a,Object b) {
         this.a = a
         this.b = b
@@ -70,11 +92,13 @@ class FunctionAdd implements FunctionDefinition{
     
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionMult implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionMult(Object a,Object b) {
         this.a = a
         this.b = b
@@ -86,11 +110,13 @@ class FunctionMult implements FunctionDefinition{
 
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionDiv implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionDiv(Object a,Object b) {
         this.a = a
         this.b = b
@@ -102,11 +128,13 @@ class FunctionDiv implements FunctionDefinition{
 
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionSub implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionSub(Object a,Object b) {
         this.a = a
         this.b = b
@@ -118,11 +146,13 @@ class FunctionSub implements FunctionDefinition{
 
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionMod implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionMod(Object a,Object b) {
         this.a = a
         this.b = b
@@ -134,11 +164,13 @@ class FunctionMod implements FunctionDefinition{
 
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionEqu implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionEqu(Object a,Object b) {
         this.a = a
         this.b = b
@@ -150,11 +182,13 @@ class FunctionEqu implements FunctionDefinition{
 
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionLess implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionLess(Object a,Object b) {
         this.a = a
         this.b = b
@@ -166,11 +200,13 @@ class FunctionLess implements FunctionDefinition{
 
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionLessThan implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionLessThan(Object a,Object b) {
         this.a = a
         this.b = b
@@ -182,11 +218,13 @@ class FunctionLessThan implements FunctionDefinition{
 
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionGreater implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionGreater(Object a,Object b) {
         this.a = a
         this.b = b
@@ -198,11 +236,13 @@ class FunctionGreater implements FunctionDefinition{
 
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionGreaterThan implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionGreaterThan(Object a,Object b) {
         this.a = a
         this.b = b
@@ -214,11 +254,13 @@ class FunctionGreaterThan implements FunctionDefinition{
 
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionAnd implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionAnd(Object a,Object b) {
         this.a = a
         this.b = b
@@ -230,11 +272,13 @@ class FunctionAnd implements FunctionDefinition{
 
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionOr implements FunctionDefinition{
     Object a
     Object b
+    Integer param = 2
     def FunctionOr(Object a,Object b) {
         this.a = a
         this.b = b
@@ -245,10 +289,12 @@ class FunctionOr implements FunctionDefinition{
     }
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
+    def getParam(){ this.param }
 }
 
 class FunctionNot implements FunctionDefinition{
     Object a
+    Integer param = 1
     def FunctionNot(Object a) {
         this.a = a
     }
@@ -258,12 +304,14 @@ class FunctionNot implements FunctionDefinition{
     }
 
     def setA(Object a) { this.a = a }
+    def getParam(){ this.param }
 }
 
 class FunctionIf implements FunctionDefinition{
     Object a
     Object b
     Object c
+    Integer param = 3
     def FunctionIf(Object a,Object b, Object c) {
         this.a = a
         this.b = b
@@ -277,95 +325,91 @@ class FunctionIf implements FunctionDefinition{
     def setA(Object a) { this.a = a } 
     def setB(Object b) { this.b = b }
     def setC(Object c) { this.c = c }
-}
-class LiteralInteger {
-    def Integer num
-    def LiteralInteger(String a){ this.num = a as Integer }
-    def getNumber(){ this.num }
+    def getParam(){ this.param }
+    def getA(){ this.a }
 }
 
-class LiteralBool {
-    def Boolean bool
-    def LiteralBool(String var){ 
-        if(var == "#t"){
-            this.bool = true 
-        }
-        else if (var == "#f"){
-            this.bool = false
-        }
-    }
-    def getBool(){ this.bool }
+class LiteralInteger implements FunctionDefinition{
+    def Integer a
+    LiteralInteger(Object a){ setA(a)}
+    @Override
+    def execute () { a }
+    def setA(Object a) { this.a = a as Integer} 
 }
 
-
-/**def bucle = true
-while(bucle) {
-    def scheme = System.console().readLine 'scheme> '
-    if (scheme == 'exit') { bucle = false }
-    else{ System.console().println()) }    
-}**/
-//def lista = ['+','2','3']
-//          ['not' , '#t']
-
-// map.get(list[0])
-
-
+class LiteralBool implements FunctionDefinition{
+    def Boolean a
+    LiteralBool(Object a){ setA(a) }
+    @Override
+    def execute () { a }
+    def setA(Object a) {
+        if(a == '#t' || a == ['#t']){ this.a = true }
+        else if (a =='#f' || a == ['#f']){ this.a = false } 
+    } 
+}
 
 class FunctionStack {
-    Global global = new Global()
-    /*def parseList = []
-    
-    def setParseList (String input) { this.parseList = new Parser().parse(input) }
-    def getParseList () { this.parseList }*/
+
+    def next(List list, int pos){
+        try { return list[pos] }
+        catch(Exception e) {}
+    }
+
+    def change(List list, String old, String newS){
+        Collections.replaceAll(list, old, newS)
+    }
 
     def analize(Object parseList){
-        println(parseList)
-        def first = global.map.containsKey(parseList[0])
-        if ( !first ){
-            if (parseList.contains('#')) { return new LiteralBool(parseList).getBool() } 
-            else if (parseList[0].contains('#')){ return new LiteralBool(parseList[0]).getBool() }
-            else{ 
-            
-            return new LiteralInteger(parseList).getNumber() }
+        if (parseList == null){return}
+        println('parcelist : '+parseList)
+        if(parseList[0] == 'define'){
+            def ret = parseList[1][0]
+            def temp = parseList[1]
+            Global.map.put(ret, new FunctionDefine(parseList.tail().tail(),temp))
+            return "Function: $ret"
         }
-        else {
-            def variable = global.map.get(parseList[0])
-            try{
-                if ( variable.setA(analize(parseList[1]))) { variable.setB(analize(parseList[2])) }
-                else { variable.setC(analize(parseList[3])) } 
-                variable.execute()
-            }catch (Exception e){
-                try{
-                    variable.setA(analize(parseList[1]))
-                    variable.setB(analize(parseList[2]))
-                    variable.execute()
-                }catch (Exception e1){
-                    try {
-                        variable.setA(analize(parseList[1]))
-                        variable.execute()
-                    }catch(Exception e2) {println ("error")}
-                    
-                }
+        def first = Global.map.containsKey(parseList[0])
+        if (!first){
+            try { return new LiteralInteger(parseList).execute() }
+            catch(Exception e) { 
+                try { return new LiteralInteger(parseList[0]).execute()  }
+                catch(Exception e2) { return new LiteralBool(parseList).execute() }
             }
+        }
+        else{
+            def variable = Global.map.get(parseList[0])
+            switch(variable.getParam()) {
+                case 1:
+                    variable.setA(analize(next(parseList, 1)))
+                    break
+                case 2:
+                    variable.setA(analize(next(parseList, 1)))
+                    variable.setB(analize(next(parseList, 2)))
+                    break
+                case 3:
+                    variable.setA(analize(next(parseList, 1)))
+                    if (variable.getA()){ variable.setB(analize(next(parseList, 2))) }
+                    else{ variable.setC(analize(next(parseList, 3))) }
+                    break
+                case 0:
+                    variable.parameter.each{ variable.setDefinitions(it) }
+                    break
+            }
+            variable.execute()
         }
     }
 }
 
-
-// 1
-    // ['12'],['#t']
-// 2
-    // ['+', '1','2']   -   ['if', '#t', '2', '3']    - ['not','#t']
-// 3
-    // ['+',['module', '10', '2'] , ['1']]
-
-/*def variable = map.get('if')
-variable.setA(new LiteralBool('#t').getBool())
-variable.setB(new LiteralInteger('7').getNumber())
-variable.setC(new LiteralInteger('2').getNumber())
-println (variable.execute())*/
 
 FunctionStack f = new FunctionStack()
 Parser par = new Parser()
-def list = par.parse('(if (not (>= 5 3)) (+ (- 3 1) (modulo 9 6)) (- (* 10 6) (quotient 10 3)))')
-f.analize(list)
+Global.setMap()
+def bucle = true
+while(bucle) {
+    def scheme = System.console().readLine 'scheme> '
+    if (scheme == 'exit') { bucle = false }
+    else{
+        def list = par.parse(scheme)
+        System.console().println(f.analize(list)) 
+    }    
+}
