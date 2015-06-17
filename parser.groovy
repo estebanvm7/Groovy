@@ -58,21 +58,19 @@ interface FunctionDefinition {
 }
 
 class FunctionDefine implements FunctionDefinition{
-    List<Object> parameter
-    List<Object> invoke
-    List<Object> definitions = []
+    Object parameter
+    Object invoke
+    Object res
     Integer param = 0
 
     def FunctionDefine(List list, List list2){
-        this.parameter = []
         this.parameter = list
-        this.invoke = []
         this.invoke = list2
     }
     @Override
-    execute(){ this.definitions.each{ it.execute() } }
+    execute(){ this.res }
     
-     def setDefinitions(FunctionDefinition a) { this.a = definitions.add(a) } 
+     def setDefinitions(Object res) { this.res = res } 
 
 
 }
@@ -344,9 +342,11 @@ class LiteralBool implements FunctionDefinition{
     def execute () { a }
     def setA(Object a) {
         if(a == '#t' || a == ['#t']){ this.a = true }
-        else if (a =='#f' || a == ['#f']){ this.a = false } 
-    } 
-}
+        else if (a =='#f' || a == ['#f']){ this.a = false }
+        else if (a == true){ this.a = true }
+        else{ this.a = false} 
+    }  
+} 
 
 class FunctionStack {
 
@@ -358,14 +358,21 @@ class FunctionStack {
     def change(List list, String old, String newS){
         Collections.replaceAll(list, old, newS)
     }
+    
+    def find (list){
+        while (true){
+            try{list = next(list, 1)}
+            catch(Exception e){return list} 
+        }
+    }
 
     def analize(Object parseList){
+        println("entrada "+parseList)
         if (parseList == null){return}
-        println('parcelist : '+parseList)
         if(parseList[0] == 'define'){
             def ret = parseList[1][0]
             def temp = parseList[1]
-            Global.map.put(ret, new FunctionDefine(parseList.tail().tail(),temp))
+            Global.map.put(ret, new FunctionDefine(parseList[2],temp))
             return "Function: $ret"
         }
         def first = Global.map.containsKey(parseList[0])
@@ -383,19 +390,33 @@ class FunctionStack {
                     variable.setA(analize(next(parseList, 1)))
                     break
                 case 2:
-                    variable.setA(analize(next(parseList, 1)))
+                    def a = variable.setA(analize(next(parseList, 1)))
                     variable.setB(analize(next(parseList, 2)))
+                    variable.setA(a)
                     break
                 case 3:
+                    println("next "+next(parseList, 1))
                     variable.setA(analize(next(parseList, 1)))
                     if (variable.getA()){ variable.setB(analize(next(parseList, 2))) }
                     else{ variable.setC(analize(next(parseList, 3))) }
                     break
                 case 0:
-                    variable.parameter.each{ variable.setDefinitions(it) }
+                    def para = variable.parameter.join(" , ")
+                    println(para)
+                    println("1: "+variable.invoke[1])
+                    println("2: "+find(parseList))
+                    println("invoke: "+variable.invoke)
+                    def para2 = para.replace(variable.invoke[1],find(parseList))
+                    println(para2)
+                    def para3 = Arrays.asList(para2.split("\\s*,\\s*"))
+                    println("analize "+para3 )
+                    variable.setDefinitions(analize(para3))   
                     break
+                    
+                    //FunctionDefinition(FunctionAdd(FunctionAdd(n,1),1))  
+                    
             }
-            variable.execute()
+            variable.execute()    
         }
     }
 }
