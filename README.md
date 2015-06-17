@@ -15,7 +15,7 @@ Construir un intérprete interactivo de línea de comando que lea una expresión
 
 Compilar y ejecutar el programa
 ```
-$ groovy scheme.groovy
+$ groovy Scheme.groovy
 ```
 
 mas información de Scheme https://es.wikipedia.org/wiki/Scheme
